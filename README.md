@@ -52,13 +52,13 @@ pip install flask werkzeug
 Clone or Download this repository
 
 bash
-Copy code
+ 
 git clone https://github.com/yourusername/sharebox.git
 cd sharebox
 Run the app
 
 bash
-Copy code
+ 
 python file_transfer_app.py
 The app will:
 
@@ -100,7 +100,7 @@ Reset password with a new one
 
 📂 Project Structure
 bash
-Copy code
+ 
 project/
 │── file_transfer_app.py   # Main application
 │── app.db                 # SQLite database (auto-created on first run)
