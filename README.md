@@ -1,120 +1,160 @@
 # 📂 ShareBox – File Transfer & Sharing App
 
-A **Flask-based file sharing application** with **user roles (Admin/User)**, secure file uploads, previews, and downloads.  
-Everything is stored in a local **SQLite database**, and the app auto-opens in your browser after running.  
+ShareBox is a simple **Flask-based file sharing app** with role-based access:
+- **Admins** can upload and delete files.
+- **Users** can view and download files uploaded by their assigned admin.
+- Supports image, video, and audio previews.
+- Secure password hashing and reset system.
+- Clean responsive UI with light/dark mode toggle.
 
 ---
 
 ## 🚀 Features
-
-- 👩‍💼 **Admin**
-  - Register with unique **reference code**
-  - Upload multiple files at once
-  - View, preview, download, and delete files
-
-- 👤 **User**
-  - Register using an **Admin reference code**
-  - View and download files uploaded by assigned admin
-
-- 🔑 **Authentication**
-  - User registration & login system
-  - Passwords securely stored using hashing
-  - Forgot/reset password functionality
-
-- 📁 **File Management**
-  - Supports images, videos, and audio with in-browser preview
-  - Secure file download
-  - Admin-only file deletion
-
-- 🎨 **Modern UI**
-  - Light/Dark mode toggle 🌙/☀️
-  - Responsive card-based design
-
-- 🖥️ **Ease of Use**
-  - Auto-detects your local IP
-  - Automatically opens browser on start
+- 🔑 User registration with roles (Admin / User)
+- 👩‍💻 Admin reference code system for linking users
+- 📂 File upload/download (with previews for media)
+- 🗑️ File deletion (admin only, via AJAX)
+- 🌗 Light/Dark theme toggle (saved in local storage)
+- 🔐 Secure authentication (hashed passwords)
+- 🔄 Forget & Reset password workflow
+- 🌍 Auto-detects local IP and opens browser automatically
 
 ---
 
-## 📦 Requirements
+## 🛠️ Requirements
 
-### ✅ Already Included (no need to install separately)
-- `os`, `sqlite3`, `random`, `string`, `webbrowser`, `threading`, `time`, `socket` (built-in with Python)
+- Python **3.8+** (tested with 3.8, 3.9, 3.10, 3.11)
+- No external database needed – uses **SQLite3** (built-in with Python)
+- Dependencies:
+  - `Flask`
+  - `Werkzeug` (comes with Flask)
+  - `Jinja2` (comes with Flask)
 
-### 📥 Need to Install
-You need Python **3.8+** and the following pip packages:
+---
 
-```bash
-pip install flask werkzeug
-(Flask already includes Jinja2, so no need to install it separately.)
+## 📥 Installation
 
-▶️ How to Run
-Clone or Download this repository
+1. **Clone or download** this repository:
+   ```bash
+   git clone https://github.com/yourusername/sharebox.git
+   cd sharebox
+Create a virtual environment (recommended):
 
 bash
 Copy code
-git clone https://github.com/yourusername/sharebox.git
-cd sharebox
-Run the app
+python -m venv venv
+source venv/bin/activate   # Linux / Mac
+venv\Scripts\activate      # Windows
+Install dependencies:
+
+bash
+Copy code
+pip install flask
+(Werkzeug and Jinja2 will be installed automatically.)
+
+Verify installation:
+
+bash
+Copy code
+python -m flask --version
+▶️ Usage
+Run the app:
 
 bash
 Copy code
 python file_transfer_app.py
-The app will:
+On startup, the app:
 
-Start a Flask server at http://<your-local-ip>:5000
+Creates a SQLite database file (app.db) if not present
 
-Auto-open your default browser
+Creates an uploads/ folder for storing files
 
-📝 Usage Guide
-1. Register as Admin
-Go to Register
+Detects your local IP
 
-Choose Admin role
+Automatically opens your browser to http://<your-ip>:5000
 
-After registering, you’ll see a unique reference code (e.g., ADM123456)
+Register an Admin account:
 
-2. Register as User
-Choose User role
+Go to http://127.0.0.1:5000/register
 
-Enter Admin’s reference code
+Select Admin
 
-Now this user will be linked to that admin’s files
+Copy the generated Admin Reference Code
 
-3. Admin Functions
-Upload files (images, audio, video, docs)
+Register a User account:
+
+Go to http://127.0.0.1:5000/register
+
+Select User
+
+Enter the Admin Reference Code to link the account
+
+Login and start sharing files!
+
+📂 File Management
+Admins:
+
+Upload multiple files
 
 Delete files
 
-Share files with linked users
+Share reference code with users
 
-4. User Functions
-View all files uploaded by their assigned admin
+Users:
 
-Download or preview (if supported)
+Can only view and download files from their assigned admin
 
-5. Password Reset
-Forgot password → enter username
+Supported previews:
 
-Reset password with a new one
+Images: .png, .jpg, .jpeg, .gif
 
-📂 Project Structure
+Videos: .mp4, .webm, .ogg
+
+Audio: .mp3, .wav, .ogg
+
+Other file types can still be downloaded but won’t show previews.
+
+🔧 Project Structure
 bash
 Copy code
-project/
-│── file_transfer_app.py   # Main application
-│── app.db                 # SQLite database (auto-created on first run)
-│── uploads/               # Uploaded files (auto-created)
-│── static/logo.svg        # App logo
-⚠️ Notes
-Files are stored locally in the uploads/ folder
+file_transfer_app.py   # Main Flask app
+app.db                 # SQLite database (auto-created)
+uploads/               # Uploaded files (auto-created)
+static/logo.svg        # App logo
+🔒 Security Notes
+Passwords are stored hashed using Werkzeug.
 
-Database is stored in app.db
+Sessions use Flask’s secret_key.
 
-This is not production-ready (no HTTPS, no rate limiting)
+For production:
 
-For real deployment, run with gunicorn/uwsgi and use Nginx/Apache
+Change app.secret_key to a secure random value.
+
+Run with a production-ready server (e.g., Gunicorn, uWSGI, nginx).
+
+Consider using HTTPS.
+
+🐛 Troubleshooting
+Port already in use:
+Change port in file_transfer_app.py:
+
+python
+Copy code
+app.run(host="0.0.0.0", port=8080, debug=True)
+Database reset:
+Delete app.db and restart app to start fresh.
+
+File not found on preview/download:
+Ensure files exist inside the uploads/ folder.
 
 📜 License
-This project is for educational/demo purposes only.
-Feel free to fork and improve it 🎉
+MIT License – feel free to use and modify.
+
+💡 Future Enhancements
+Email verification & password reset links
+
+File sharing via direct links
+
+Search & filter files
+
+Admin dashboard with analytics
